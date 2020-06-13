@@ -1,13 +1,12 @@
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-COPY ./package.json /usr/src/app/
-RUN npm install --production && npm cache clean --force
-COPY ./ /usr/src/app
+FROM node:latest as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY ./ .
 ENV NODE_ENV production
-ENV PORT 80
-EXPOSE 80
+RUN npm run build
 
-CMD [ "npm", "start" ]
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

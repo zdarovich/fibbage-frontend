@@ -25,7 +25,7 @@ Vue.use(Buefy, {
   defaultIconPack: 'fas',
 });
 Vue.config.productionTip = false
-Vue.use(Starx,{params:{host: 'http://9381c50ee3b1.ngrok.io', path: '/'}, store: store })
+Vue.use(Starx,{params:{host: '192.168.64.2', port:'30007', path: '/'}, store: store })
 Vue.use(VueAnime)
 
 new Vue({
